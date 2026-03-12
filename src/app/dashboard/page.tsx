@@ -3,100 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-interface Board {
-  id: string;
-  name: string;
-  location: string;
-  status: "active" | "warning" | "inactive";
-  voltage: string;
-  current: string;
-  lastInspection: string;
-  alerts: string[];
-}
-
-const boardsData: Board[] = [
-  {
-    id: "TB-001",
-    name: "Tablero Principal",
-    location: "Sala Eléctrica - Planta Baja",
-    status: "active",
-    voltage: "400V",
-    current: "250A",
-    lastInspection: "2026-03-10",
-    alerts: ["Mantenimiento programado para abril", "Filtros de aire limpiados"]
-  },
-  {
-    id: "TB-002",
-    name: "Tablero de Distribución A",
-    location: "Sector A - Nivel 1",
-    status: "active",
-    voltage: "400V",
-    current: "180A",
-    lastInspection: "2026-03-08",
-    alerts: []
-  },
-  {
-    id: "TB-003",
-    name: "Tablero de Distribución B",
-    location: "Sector B - Nivel 1",
-    status: "warning",
-    voltage: "395V",
-    current: "165A",
-    lastInspection: "2026-03-05",
-    alerts: ["Sobrecarga detectada en fase C", "Revisar conexión"]
-  },
-  {
-    id: "TB-004",
-    name: "Tablero de Emergencia",
-    location: "Sala de Emergencias",
-    status: "active",
-    voltage: "400V",
-    current: "45A",
-    lastInspection: "2026-03-12",
-    alerts: ["Prueba de transferencia exitosa"]
-  },
-  {
-    id: "TB-005",
-    name: "Tablero de Iluminación",
-    location: "Pasillo Central",
-    status: "active",
-    voltage: "230V",
-    current: "32A",
-    lastInspection: "2026-03-01",
-    alerts: []
-  },
-  {
-    id: "TB-006",
-    name: "Tablero de Motores",
-    location: "Sala de Máquinas",
-    status: "inactive",
-    voltage: "0V",
-    current: "0A",
-    lastInspection: "2026-02-28",
-    alerts: ["Fuera de servicio por mantenimiento", "Esperando repuesto"]
-  },
-  {
-    id: "TB-007",
-    name: "Tablero de Climatización",
-    location: "Sala Técnica - Techo",
-    status: "warning",
-    voltage: "400V",
-    current: "95A",
-    lastInspection: "2026-03-09",
-    alerts: ["Filtro obstruido", "Revisar consumo"]
-  },
-  {
-    id: "TB-008",
-    name: "Tablero deUPS",
-    location: "Sala de Servidores",
-    status: "active",
-    voltage: "230V",
-    current: "28A",
-    lastInspection: "2026-03-11",
-    alerts: ["Baterías al 95%"]
-  }
-];
+import { useBoards, type Board } from "../layout";
 
 function getStatusLabel(status: string): string {
   switch (status) {
@@ -109,7 +16,7 @@ function getStatusLabel(status: string): string {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [boards] = useState<Board[]>(boardsData);
+  const { boards } = useBoards();
   const [filter, setFilter] = useState<string>("all");
 
   const handleLogout = () => {
@@ -149,9 +56,14 @@ export default function DashboardPage() {
             </svg>
             <h1 style={{ margin: 0, fontSize: "1.25rem" }}>Control de Tableros Eléctricos</h1>
           </div>
-          <button onClick={handleLogout} className="btn-secondary">
-            Cerrar Sesión
-          </button>
+          <div style={{ display: "flex", gap: "0.5rem" }}>
+            <Link href="/dashboard/gestion" className="btn-secondary" style={{ textDecoration: "none" }}>
+              Gestionar Tableros
+            </Link>
+            <button onClick={handleLogout} className="btn-secondary">
+              Cerrar Sesión
+            </button>
+          </div>
         </div>
       </header>
 

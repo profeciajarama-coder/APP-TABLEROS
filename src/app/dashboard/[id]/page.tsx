@@ -1,163 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-
-interface Board {
-  id: string;
-  name: string;
-  location: string;
-  status: "active" | "warning" | "inactive";
-  voltage: string;
-  current: string;
-  power: string;
-  frequency: string;
-  lastInspection: string;
-  nextMaintenance: string;
-  alerts: string[];
-  logs: { date: string; type: "info" | "warning" | "error"; message: string }[];
-}
-
-const boardsData: Record<string, Board> = {
-  "TB-001": {
-    id: "TB-001",
-    name: "Tablero Principal",
-    location: "Sala Eléctrica - Planta Baja",
-    status: "active",
-    voltage: "400V",
-    current: "250A",
-    power: "173kVA",
-    frequency: "50Hz",
-    lastInspection: "2026-03-10",
-    nextMaintenance: "2026-04-10",
-    alerts: ["Mantenimiento programado para abril", "Filtros de aire limpiados"],
-    logs: [
-      { date: "2026-03-12 08:30", type: "info", message: "Inspección diaria completada" },
-      { date: "2026-03-10 14:00", type: "info", message: "Mantenimiento preventivo realizado" },
-      { date: "2026-03-05 09:15", type: "info", message: "Cambio de filtros de aire" },
-    ]
-  },
-  "TB-002": {
-    id: "TB-002",
-    name: "Tablero de Distribución A",
-    location: "Sector A - Nivel 1",
-    status: "active",
-    voltage: "400V",
-    current: "180A",
-    power: "124kVA",
-    frequency: "50Hz",
-    lastInspection: "2026-03-08",
-    nextMaintenance: "2026-04-08",
-    alerts: [],
-    logs: [
-      { date: "2026-03-11 10:00", type: "info", message: "Mediciones dentro de parámetros" },
-      { date: "2026-03-08 15:30", type: "info", message: "Inspección completada" },
-    ]
-  },
-  "TB-003": {
-    id: "TB-003",
-    name: "Tablero de Distribución B",
-    location: "Sector B - Nivel 1",
-    status: "warning",
-    voltage: "395V",
-    current: "165A",
-    power: "114kVA",
-    frequency: "50Hz",
-    lastInspection: "2026-03-05",
-    nextMaintenance: "2026-03-20",
-    alerts: ["Sobrecarga detectada en fase C", "Revisar conexión"],
-    logs: [
-      { date: "2026-03-12 11:45", type: "warning", message: "Sobrecarga detectada en fase C" },
-      { date: "2026-03-12 11:40", type: "warning", message: "Temperatura elevada en interruptor principal" },
-      { date: "2026-03-05 09:00", type: "info", message: "Inspección de rutina" },
-    ]
-  },
-  "TB-004": {
-    id: "TB-004",
-    name: "Tablero de Emergencia",
-    location: "Sala de Emergencias",
-    status: "active",
-    voltage: "400V",
-    current: "45A",
-    power: "31kVA",
-    frequency: "50Hz",
-    lastInspection: "2026-03-12",
-    nextMaintenance: "2026-04-12",
-    alerts: ["Prueba de transferencia exitosa"],
-    logs: [
-      { date: "2026-03-12 06:00", type: "info", message: "Prueba de transferencia automática exitosa" },
-      { date: "2026-03-11 22:00", type: "info", message: "Sistema en modo standby" },
-    ]
-  },
-  "TB-005": {
-    id: "TB-005",
-    name: "Tablero de Iluminación",
-    location: "Pasillo Central",
-    status: "active",
-    voltage: "230V",
-    current: "32A",
-    power: "7.4kW",
-    frequency: "50Hz",
-    lastInspection: "2026-03-01",
-    nextMaintenance: "2026-04-01",
-    alerts: [],
-    logs: [
-      { date: "2026-03-10 18:00", type: "info", message: "Horario de iluminación verificado" },
-    ]
-  },
-  "TB-006": {
-    id: "TB-006",
-    name: "Tablero de Motores",
-    location: "Sala de Máquinas",
-    status: "inactive",
-    voltage: "0V",
-    current: "0A",
-    power: "0kW",
-    frequency: "50Hz",
-    lastInspection: "2026-02-28",
-    nextMaintenance: "2026-03-15",
-    alerts: ["Fuera de servicio por mantenimiento", "Esperando repuesto"],
-    logs: [
-      { date: "2026-03-01 08:00", type: "error", message: "Sistema desconectado para mantenimiento" },
-      { date: "2026-02-28 16:30", type: "warning", message: "Detección de falla en motor principal" },
-    ]
-  },
-  "TB-007": {
-    id: "TB-007",
-    name: "Tablero de Climatización",
-    location: "Sala Técnica - Techo",
-    status: "warning",
-    voltage: "400V",
-    current: "95A",
-    power: "66kVA",
-    frequency: "50Hz",
-    lastInspection: "2026-03-09",
-    nextMaintenance: "2026-03-25",
-    alerts: ["Filtro obstruido", "Revisar consumo"],
-    logs: [
-      { date: "2026-03-12 07:30", type: "warning", message: "Filtro de aire parcialmente obstruido" },
-      { date: "2026-03-09 11:00", type: "info", message: "Inspección de sistemas de climatización" },
-    ]
-  },
-  "TB-008": {
-    id: "TB-008",
-    name: "Tablero de UPS",
-    location: "Sala de Servidores",
-    status: "active",
-    voltage: "230V",
-    current: "28A",
-    power: "6.4kW",
-    frequency: "50Hz",
-    lastInspection: "2026-03-11",
-    nextMaintenance: "2026-04-11",
-    alerts: ["Baterías al 95%"],
-    logs: [
-      { date: "2026-03-12 00:00", type: "info", message: "Carga de baterías al 95%" },
-      { date: "2026-03-11 12:00", type: "info", message: "Sistema funcionando correctamente" },
-    ]
-  },
-};
+import { useBoards, type Board } from "../../layout";
 
 function getStatusLabel(status: string): string {
   switch (status) {
@@ -171,8 +17,10 @@ function getStatusLabel(status: string): string {
 export default function BoardDetailPage() {
   const router = useRouter();
   const params = useParams();
+  const { boards } = useBoards();
   const boardId = params.id as string;
-  const board = boardId ? boardsData[boardId] : null;
+  const board = boards.find((b: Board) => b.id === boardId);
+  
   const isAuthenticated = typeof window !== "undefined" && localStorage.getItem("isAuthenticated");
 
   useEffect(() => {
@@ -265,7 +113,7 @@ export default function BoardDetailPage() {
             </div>
             <div className="info-row">
               <span className="info-label">Próximo Mantenimiento</span>
-              <span className="info-value">{board.nextMaintenance}</span>
+              <span className="info-value">{board.nextMaintenance || "No programada"}</span>
             </div>
           </div>
         </div>
@@ -298,7 +146,7 @@ export default function BoardDetailPage() {
           <div className="detail-card">
             <div className="detail-section">
               <h3>Alertas</h3>
-              {board.alerts.map((alert, idx) => (
+              {board.alerts.map((alert: string, idx: number) => (
                 <div key={idx} style={{ 
                   padding: "0.75rem", 
                   background: "#fef3c7", 
@@ -316,19 +164,23 @@ export default function BoardDetailPage() {
         <div className="detail-card">
           <div className="detail-section">
             <h3>Historial de Eventos</h3>
-            {board.logs.map((log, idx) => (
-              <div key={idx} className={`log-entry ${log.type}`}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <span style={{ fontWeight: "500" }}>
-                    {log.type === "error" && "Error"}
-                    {log.type === "warning" && "Advertencia"}
-                    {log.type === "info" && "Información"}
-                  </span>
-                  <span className="log-date">{log.date}</span>
+            {board.logs && board.logs.length > 0 ? (
+              board.logs.map((log: Board["logs"][number], idx: number) => (
+                <div key={idx} className={`log-entry ${log.type}`}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontWeight: "500" }}>
+                      {log.type === "error" && "Error"}
+                      {log.type === "warning" && "Advertencia"}
+                      {log.type === "info" && "Información"}
+                    </span>
+                    <span className="log-date">{log.date}</span>
+                  </div>
+                  <p style={{ margin: "0.25rem 0 0", color: "#374151" }}>{log.message}</p>
                 </div>
-                <p style={{ margin: "0.25rem 0 0", color: "#374151" }}>{log.message}</p>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p style={{ color: "#6b7280", textAlign: "center" }}>No hay eventos registrados</p>
+            )}
           </div>
         </div>
       </div>
