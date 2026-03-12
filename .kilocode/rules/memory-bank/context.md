@@ -1,87 +1,49 @@
-# Active Context: Next.js Starter Template
+# Active Context: Sistema de Control de Tableros Eléctricos
 
 ## Current State
 
-**Template Status**: ✅ Ready for development
+**Application Status**: ✅ Funcional
 
-The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. It's ready for AI-assisted expansion to build any type of application.
+Sistema de gestión de tableros eléctricos de planta implementado con Next.js 16, TypeScript y Tailwind CSS 4.
 
 ## Recently Completed
 
-- [x] Base Next.js 16 setup with App Router
-- [x] TypeScript configuration with strict mode
-- [x] Tailwind CSS 4 integration
-- [x] ESLint configuration
-- [x] Memory bank documentation
-- [x] Recipe system for common features
+- [x] Portal de acceso con usuario y contraseña (admin/admin123)
+- [x] Dashboard con lista de tableros eléctricos
+- [x] Tarjetas scrolleables con información de cada tablero
+- [x] Página de detalle por cada tablero
+- [x] Filtros por estado (Operativos, Alertas, Inactivos)
+- [x] Diseño responsive para móviles y web
 
 ## Current Structure
 
 | File/Directory | Purpose | Status |
 |----------------|---------|--------|
-| `src/app/page.tsx` | Home page | ✅ Ready |
-| `src/app/layout.tsx` | Root layout | ✅ Ready |
-| `src/app/globals.css` | Global styles | ✅ Ready |
-| `.kilocode/` | AI context & recipes | ✅ Ready |
+| `app/page.tsx` | Página de login | ✅ |
+| `app/dashboard/page.tsx` | Dashboard principal | ✅ |
+| `app/dashboard/[id]/page.tsx` | Detalle de tablero | ✅ |
+| `app/globals.css` | Estilos globales | ✅ |
+| `app/layout.tsx` | Root layout | ✅ |
 
-## Current Focus
+## Features Implementadas
 
-The template is ready. Next steps depend on user requirements:
+1. **Login**: Usuario `admin`, contraseña `admin123`
+2. **8 tableros de ejemplo** con datos simulateados
+3. **Estados**: Operativo (verde), Alerta (amarillo), Inactivo (rojo)
+4. **Parámetros**: Voltaje, Corriente, Potencia, Frecuencia
+5. **Historial de eventos** con logs
+6. **Diseño responsive** con CSS grid
 
-1. What type of application to build
-2. What features are needed
-3. Design/branding preferences
+## Quick Start
 
-## Quick Start Guide
-
-### To add a new page:
-
-Create a file at `src/app/[route]/page.tsx`:
-```tsx
-export default function NewPage() {
-  return <div>New page content</div>;
-}
+```bash
+bun dev
 ```
 
-### To add components:
-
-Create `src/components/` directory and add components:
-```tsx
-// src/components/ui/Button.tsx
-export function Button({ children }: { children: React.ReactNode }) {
-  return <button className="px-4 py-2 bg-blue-600 text-white rounded">{children}</button>;
-}
-```
-
-### To add a database:
-
-Follow `.kilocode/recipes/add-database.md`
-
-### To add API routes:
-
-Create `src/app/api/[route]/route.ts`:
-```tsx
-import { NextResponse } from "next/server";
-
-export async function GET() {
-  return NextResponse.json({ message: "Hello" });
-}
-```
-
-## Available Recipes
-
-| Recipe | File | Use Case |
-|--------|------|----------|
-| Add Database | `.kilocode/recipes/add-database.md` | Data persistence with Drizzle + SQLite |
-
-## Pending Improvements
-
-- [ ] Add more recipes (auth, email, etc.)
-- [ ] Add example components
-- [ ] Add testing setup recipe
+Acceder a: http://localhost:3000
 
 ## Session History
 
 | Date | Changes |
 |------|---------|
-| Initial | Template created with base setup |
+| 2026-03-12 | Sistema de control de tableros eléctricos implementado |
