@@ -69,7 +69,8 @@ export default function GestionPage() {
       addBoard({
         ...formData,
         alerts: alertsArray,
-        logs: []
+        logs: [],
+        components: []
       });
     }
     closeModal();
