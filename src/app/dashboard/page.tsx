@@ -57,6 +57,9 @@ export default function DashboardPage() {
             <h1 style={{ margin: 0, fontSize: "1.25rem" }}>Control de Tableros Eléctricos</h1>
           </div>
           <div style={{ display: "flex", gap: "0.5rem" }}>
+            <Link href="/dashboard/maquinas" className="btn-secondary" style={{ textDecoration: "none" }}>
+              Registro de Máquinas
+            </Link>
             <Link href="/dashboard/gestion" className="btn-secondary" style={{ textDecoration: "none" }}>
               Gestionar Tableros
             </Link>
